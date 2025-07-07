@@ -2,7 +2,7 @@
 Script Bash para varredura e extração de credenciais em massa a partir de arquivos `.txt`, com foco em dumps vazados. Ideal para análises manuais, automações de coleta e separação de dados úteis por padrão.
 
 <p align="center">
-  <img src="https://img1.picmix.com/output/stamp/normal/1/0/5/2/2572501_250d1.gif" alt="Cloud Exploit GIF" width="600"/>
+  <img src="https://img1.picmix.com/output/stamp/normal/1/0/5/2/2572501_250d1.gif" alt="Cloud Exploit GIF" width="200"/>
 </p>
 
 
