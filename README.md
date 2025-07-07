@@ -1,43 +1,41 @@
-# 🔍 Script de Busca com Grep
+# 🕵️ Smarhunter.sh
+Script Bash para varredura e extração de credenciais em massa a partir de arquivos `.txt`, com foco em dumps vazados. Ideal para análises manuais, automações de coleta e separação de dados úteis por padrão.
 
-Este repositório contém um script em **Bash** que realiza buscas em arquivos do diretório atual utilizando o `grep`. O script extrai informações relevantes, como e-mails e senhas, e salva os resultados em arquivos organizados.
-
-## 📌 Funcionalidades
-- Exibição de um **banner ASCII** ao iniciar.
-- Solicitação de um **termo de busca** ao usuário.
-- Identificação automática do tipo de arquivo.
-- Busca em arquivos de texto e compactados (`gzip`).
-- Extração e separação de e-mails e senhas.
-- Notificação ao final do processo.
-
-## 🚀 Como Usar
-
-### 1️⃣ Clonar o Repositório
-```bash
-git clone https://github.com/AnubisChacal/Hole_Gaps.git
-cd seu-repositorio
-```
-
-### 2️⃣ Tornar o Script Executável
-```bash
-chmod +x grep.sh
-```
-
-### 3️⃣ Executar o Script
-```bash
-./grep.sh
-```
-
-O script solicitará um termo de busca e iniciará a varredura no diretório atual.
-
-## 📂 Estrutura de Saída
-Após a execução, os resultados serão armazenados em uma pasta nomeada com o termo de busca:
-```
-/seu-diretorio/
-  ├── termo_de_busca/
-  │   ├── result_search-DD-MM-YYYY.txt  # Resultados completos
-  │   ├── user_list.txt                 # Lista de e-mails encontrados
-  │   ├── pass_list.txt                 # Lista de senhas extraídas
-```
+<p align="center">
+  <img src="https://img1.picmix.com/output/stamp/normal/1/0/5/2/2572501_250d1.gif" alt="Cloud Exploit GIF" width="600"/>
+</p>
 
 
+---
+
+## 💡 Objetivo
+
+Extrair e organizar e-mails e senhas de forma automatizada, com base em um **termo de busca** (ex: `gmail`, `@empresa.com`, `123456`), presente em arquivos `.txt`.
+
+---
+
+## 📥 Formatos suportados
+
+O script reconhece os seguintes padrões:
+
+- `email:senha`  
+user@example.com:123456
+
+
+- `url:email:senha`  
+http://site.com/login:user@example.com:senha123
+
+
+- Blocos:
+USER: user@example.com
+PASS: senha123
+
+---
+
+## ▶️ Como usar
+
+1. Coloque o `sSmarthunter.sh` no mesmo diretório dos arquivos `.txt`
+2. Dê permissão de execução:
+ ```bash
+ chmod +x Smarthunter.sh
+./hunter.sh
