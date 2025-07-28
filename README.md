@@ -1,5 +1,5 @@
 <p align="center">
-   🕵️ Smarhunter
+   🕵️ Sm4rhünt3r
 </p>
 
 Script Bash para varredura e extração de credenciais em massa a partir de arquivos `.txt`, com foco em dumps vazados. Ideal para análises manuais, automações de coleta e separação de dados úteis por padrão.
