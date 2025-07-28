@@ -19,16 +19,14 @@ banner() {
 ⠀⠀⠀⠀⠙⠿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠛⠋⠉⠁⠀⠀⠀⠀⠈⠛⠃⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 EOF
-    echo -e "\e[0m"  # Reseta cor
+    echo -e "\e[0m"  
 }
 
-
-# Trata arquivos com formato URL:EMAIL:SENHA
 tratar_url_email_senha() {
     local arquivo="$1"
     local termo="$2"
     local diretorio="$3"
-    local modulo="url_email_senha"  # Identificador do módulo
+    local modulo="url_email_senha"  
 
     local resultado
     resultado=$(grep -a -I -n "$termo" "$arquivo" 2>/dev/null)
@@ -37,31 +35,30 @@ tratar_url_email_senha() {
         echo "$resultado" >> "$diretorio/result_search.txt"
 
         while IFS= read -r linha; do
-            # Extrai email usando regex
             if [[ $linha =~ ([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}) ]]; then
                 email="${BASH_REMATCH[1]}"
-                echo "$email (origem: $modulo)" >> "$diretorio/user_list.txt"  # Adiciona a origem
-                echo "$email (origem: $modulo)" >> "$diretorio/user_list_${modulo}.txt" # Salva em arquivo específico do módulo
+                echo "$email (origem: $modulo)" >> "$diretorio/user_list.txt" 
+                echo "$email (origem: $modulo)" >> "$diretorio/user_list_${modulo}.txt" 
 
-                # Remove o email da linha para obter a senha
+          
                 senha=$(echo "$linha" | sed "s/$email://")
                 if [[ -n "$senha" ]]; then
-                    echo "$senha (origem: $modulo)" >> "$diretorio/pass_list.txt"  # Adiciona a origem
-                    echo "$senha (origem: $modulo)" >> "$diretorio/pass_list_${modulo}.txt" # Salva em arquivo específico do módulo
+                    echo "$senha (origem: $modulo)" >> "$diretorio/pass_list.txt"  
+                    echo "$senha (origem: $modulo)" >> "$diretorio/pass_list_${modulo}.txt" 
                 fi
             fi
         done <<< "$resultado"
     fi
 }
 
-# Trata arquivos com formato EMAIL:SENHA
+
 tratar_email_senha() {
     local arquivo="$1"
     local termo="$2"
     local diretorio="$3"
-    local modulo="${4:-email_senha}"  # Permite definir o módulo externamente
+    local modulo="${4:-email_senha}"  
 
-    # Verificar entradas
+  
     if [[ -z "$arquivo" || -z "$termo" || -z "$diretorio" ]]; then
         echo "Erro: Arquivo, termo ou diretório não fornecido."
         exit 1
@@ -82,8 +79,8 @@ tratar_email_senha() {
         echo "$resultado" >> "$diretorio/result_search.txt"
 
         while IFS= read -r linha; do
-            linha=$(echo "$linha" | tr -d '\r')  # Normaliza \r\n → \n
-            [[ "$linha" == *:* ]] || continue   # Ignora linhas malformadas
+            linha=$(echo "$linha" | tr -d '\r')  
+            [[ "$linha" == *:* ]] || continue  
             email="${linha%%:*}"
             senha="${linha#*:}"
 
@@ -100,19 +97,17 @@ tratar_email_senha() {
             fi
         done <<< "$resultado"
 
-        # Deduplicação consolidada
         for file in user_list pass_list result_search; do
             sort -u "$diretorio/${file}.txt" -o "$diretorio/${file}.txt"
         done
     fi
 }
 
-# Trata arquivos com blocos USER:\nPASS:
 tratar_blocos_user_pass() {
     local arquivo="$1"
     local termo="$2"
     local diretorio="$3"
-    local modulo="blocos_user_pass"  # Identificador do módulo
+    local modulo="blocos_user_pass"  
 
     local bloco=""
     local encontrou_termo=0
@@ -124,12 +119,12 @@ tratar_blocos_user_pass() {
         else
             if echo "$line" | grep -iq "^USER:"; then
                 user=$(echo "$line" | sed 's/^USER: //')
-                echo "$user (origem: $modulo)" >> "$diretorio/user_list.txt"  # Adiciona a origem
-                echo "$user (origem: $modulo)" >> "$diretorio/user_list_${modulo}.txt" # Salva em arquivo específico do módulo
+                echo "$user (origem: $modulo)" >> "$diretorio/user_list.txt"  
+                echo "$user (origem: $modulo)" >> "$diretorio/user_list_${modulo}.txt" 
             elif echo "$line" | grep -iq "^PASS:"; then
                 pass=$(echo "$line" | sed 's/^PASS: //')
-                echo "$pass (origem: $modulo)" >> "$diretorio/pass_list.txt"  # Adiciona a origem
-                echo "$pass (origem: $modulo)" >> "$diretorio/pass_list_${modulo}.txt" # Salva em arquivo específico do módulo
+                echo "$pass (origem: $modulo)" >> "$diretorio/pass_list.txt" 
+                echo "$pass (origem: $modulo)" >> "$diretorio/pass_list_${modulo}.txt" 
             fi
 
             if echo "$line" | grep -iq "$termo"; then
@@ -138,12 +133,10 @@ tratar_blocos_user_pass() {
         fi
     done < "$arquivo"
 
-    # Deduplicação
     sort -u -o "$diretorio/user_list.txt" "$diretorio/user_list.txt"
     sort -u -o "$diretorio/pass_list.txt" "$diretorio/pass_list.txt"
 }
 
-# Função para contar arquivos de forma segura
 contar_arquivos() {
     local count=0
     shopt -s nullglob
@@ -155,7 +148,6 @@ contar_arquivos() {
 }
 
 
-# Função para contar arquivos válidos
 contar_arquivos_validos() {
     local count=0
     shopt -s nullglob
@@ -169,25 +161,20 @@ contar_arquivos_validos() {
 }
 
 
-# Função para verificar se arquivo é válido
-
-
-# Função para criar barra de progresso
 mostrar_progresso() {
     local atual=$1
     local total=$2
     local largura=50
 
-    # Evita divisão por zero
+
     ((total == 0)) && total=1
 
     local preenchido=$((atual * largura / total))
     local vazio=$((largura - preenchido))
     local percentual=$((100 * atual / total))
 
-    # Cores ANSI
-    local cor_verde="\e[42m \e[0m"  # bloco verde
-    local cor_cinza="\e[100m \e[0m" # bloco vazio cinza
+    local cor_verde="\e[42m \e[0m"  
+    local cor_cinza="\e[100m \e[0m" 
 
     printf "\r["
     
@@ -199,11 +186,11 @@ mostrar_progresso() {
     done
 
     printf "] %3d%% (%d/%d)" "$percentual" "$atual" "$total"
-    # Adiciona um pequeno atraso para visualização
+
     sleep 0.1
 }
 
-# Main
+
 main() {
     banner
     echo "Iniciando processamento..."
@@ -217,7 +204,6 @@ main() {
     diretorio="$PWD/${termo// /_}"
     mkdir -p "$diretorio"
 
-    # Garante que os arquivos existem
     [ ! -f "$diretorio/user_list.txt" ] && touch "$diretorio/user_list.txt"
     [ ! -f "$diretorio/pass_list.txt" ] && touch "$diretorio/pass_list.txt"
     [ ! -f "$diretorio/result_search.txt" ] && touch "$diretorio/result_search.txt"
